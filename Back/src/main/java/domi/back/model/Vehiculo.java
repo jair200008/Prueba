@@ -10,7 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vehiculo {
-
     private String placa;
     private String color;
     private String cod_marca;

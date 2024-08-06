@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Cliente implements Serializable {
+public class Cliente {
 
     private String codigo;
     private String tipo_documento;

@@ -9,7 +9,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class Marca implements Serializable {
+public class Marca {
     private String codigo;
     private String nombre_marca;
 
