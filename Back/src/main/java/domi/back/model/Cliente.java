@@ -1,5 +1,7 @@
 package domi.back.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,14 +9,15 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+public class Cliente implements Serializable {
 
-public class Cliente {
-
-    private String codigo;
+    private @Id String codigo;
     private String tipo_documento;
     private Long documento;
     private String primer_nombre;
