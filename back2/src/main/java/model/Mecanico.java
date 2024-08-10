@@ -1,12 +1,16 @@
-package domi.back.model;
+package model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Mecanico {
 
-
-@Data
-public class Cliente{
-    private String codigo;
     private String tipo_documento;
     private Long documento;
     private String primer_nombre;
@@ -16,9 +20,6 @@ public class Cliente{
     private String celular;
     private String direccion;
     private String email;
-
-
-
-
-
+    private char estado;
+    private String codigo;
 }

@@ -16,27 +16,24 @@ public class ClienteService {
     public List<Cliente> findAll() {
         return clienteRepository.findAll();
     }
+
     public Cliente findById(String id) {
-        return clienteRepository.findById(id).orElse(null);
-    }
-    public Cliente save(Cliente cliente) {
-        return clienteRepository.save(cliente);
+        return clienteRepository.findById(id);
     }
 
-    public void delete(Cliente cliente) {
-        clienteRepository.delete(cliente);
-    }
-    public Cliente update(String id, Cliente detalle) {
-        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-        cliente.setPrimer_nombre(detalle.getPrimer_nombre());
-        cliente.setSegundo_nombre(detalle.getSegundo_nombre());
-        cliente.setPrimer_apellido(detalle.getPrimer_apellido());
-        cliente.setSegundo_apellido(detalle.getSegundo_apellido());
-        cliente.setDireccion(detalle.getDireccion());
-        cliente.setCelular(detalle.getCelular());
-        cliente.setEmail(detalle.getEmail());
-        return clienteRepository.save(cliente);
+    public String save(Cliente cliente) {
+        String resultado = clienteRepository.save(cliente);
+        return resultado;
+
     }
 
+    public String update(Cliente detalle) {
+        String resultado = clienteRepository.update(detalle);
+        return resultado;
+    }
 
+    public String delete(String id) {
+        String resultado = clienteRepository.delete(id);
+        return resultado;
+    }
 }

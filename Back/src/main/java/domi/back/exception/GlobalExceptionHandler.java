@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+/*
     // excepciones personalizadas
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleCustomException(CustomException ex) {
@@ -19,4 +19,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleCustomException(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    */
+
 }

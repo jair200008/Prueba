@@ -25,7 +25,7 @@ form {
 form input {
     padding: 12px;
     border-radius: 8px;
-    width: 350px;
+    width: 100%;
     background-color: var(--vt-c-indigo);
     color: var(--vt-c-white);
 

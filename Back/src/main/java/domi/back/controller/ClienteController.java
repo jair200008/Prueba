@@ -1,5 +1,4 @@
 package domi.back.controller;
-
 import domi.back.model.Cliente;
 import domi.back.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,49 +15,22 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping
-    public List<Cliente> findAll() {
+    public List<Cliente> getAllClientes() {
         return clienteService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Cliente> findById(@PathVariable String id) {
-        Cliente cliente = clienteService.findById(id);
-        if(cliente != null) {
-            return ResponseEntity.ok(cliente);
-        }else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @PostMapping
-    public Cliente createCliente(@RequestBody Cliente cliente) {
+    public String createCliente(@RequestBody Cliente cliente) {
         return clienteService.save(cliente);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> updateCliente(@PathVariable String id, @RequestBody Cliente cliente) {
-        Cliente existingCliente = clienteService.findById(id);
-        if(existingCliente != null) {
-            cliente.setCodigo(id);
-            Cliente updatedCliente = clienteService.save(cliente);
-            return ResponseEntity.ok(updatedCliente);
-        }else {
-            return ResponseEntity.notFound().build();
-        }
-
+    public String updateCliente(@RequestBody Cliente cliente) {
+        return clienteService.update(cliente);
     }
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCliente(@PathVariable String id) {
-
-        if(clienteService.findById(id) != null) {
-            Cliente cliente = clienteService.findById(id);
-            clienteService.delete(cliente);
-            return ResponseEntity.noContent().build();
-        }else {
-            return ResponseEntity.notFound().build();
-        }
+    public String deleteCliente(@PathVariable String id) {
+        return clienteService.delete(id);
     }
-
 
 }
