@@ -1,7 +1,7 @@
 <script setup>
-import { ref, watch } from 'vue';
-import { useStore } from 'vuex';
-import { useAlerts } from '../../composables/useAlert.js';
+import {ref, watch} from 'vue';
+import {useStore} from 'vuex';
+import {useAlerts} from '@/composables/useAlert.js';
 
 const props = defineProps({
   cliente: {
@@ -23,13 +23,13 @@ const props = defineProps({
 
 const emit = defineEmits(['save', 'cancel']);
 const store = useStore();
-const { showAlert } = useAlerts();
+const {showAlert} = useAlerts();
 
-const cliente = ref({ ...props.cliente });
+const cliente = ref({...props.cliente});
 
 watch(() => props.cliente, (newCliente) => {
-  cliente.value = { ...newCliente };
-}, { immediate: true });
+  cliente.value = {...newCliente};
+}, {immediate: true});
 
 const handleSave = async () => {
   try {
@@ -39,6 +39,8 @@ const handleSave = async () => {
     emit('save', message);
     if (!props.isEditing && message === 'Cliente registrado exitosamente') {
       resetForm();
+    }else{
+
     }
   } catch (error) {
     showAlert('Ocurrió un error al procesar el cliente.', 'error');
@@ -96,41 +98,62 @@ const handleCancel = () => {
 </template>
 
 <style scoped>
-form{
-  width: 100%;
-}
-.cliente-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
-.form-actions {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
+input {
+  border: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
-
+input:focus {
+  transform: scale(1.05);
+}
+input:hover:not(:focus) {
+  transform: scale(1.01);
+}
 .btn {
-  padding: 8px 12px;
+  padding: 12px 12px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   color: white;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 2px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.btn.agregar, .btn.guardar {
-  background-color: #4CAF50;
-  width: 70%;
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn.agregar {
+  background-color: var(--btn-agregar);
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.btn:hover{
+  transform: scale(1.05);
+}
+
+.btn.agregar:hover {
+  background-color: var(--color-hover);
 }
 
 .btn.guardar {
-  background-color: #008CBA;
+  background-color: var(--btn-guardar);
+  width: 45%;
+}
+
+.btn.guardar:hover {
+  background-color: var(--color-hover);
 }
 
 .btn.cancelar {
-  background-color: #f44336;
+  background-color: var(--btn-cancelar);
+  width: 45%;
+}
+
+.btn.cancelar:hover {
+  background-color: var(--btn-hover-cancelar);
 }
 </style>

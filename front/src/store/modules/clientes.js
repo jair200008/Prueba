@@ -16,7 +16,10 @@ const state = {
 };
 
 const getters = {
-    allClientes: state => state.clientes,
+    allClientes: state => state.clientes.map(cliente => ({
+        ...cliente,
+        nombre_completo: `${cliente.primer_nombre || ''} ${cliente.segundo_nombre || ''} ${cliente.primer_apellido || ''} ${cliente.segundo_apellido || ''}`.trim()
+    })),
     cliente: state => state.cliente
 };
 
@@ -27,7 +30,6 @@ const actions = {
 
             commit('setClientes', response.data)
         } catch (error) {
-            console.error('Error fetching clientes:', error)
         }
     },
     async createCliente({ commit }, cliente) {
@@ -36,7 +38,6 @@ const actions = {
             commit('newCliente', response.data);
             return response.data; // Asumiendo que el mensaje viene en el campo 'message'
         } catch (error) {
-            console.error('Error creating cliente:', error);
             return error.response.data || 'Error al agregar cliente';
         }
     },
@@ -45,10 +46,8 @@ const actions = {
         try {
             const response = await axios.put(`http://localhost:8085/clientes/${cliente.id}`, cliente)
             commit('updateCliente', response.data)
-            console.log(response.data);
             return response.data
         } catch (error) {
-            console.error('Error updating cliente:', error)
             return error.response.data || 'Error al actualizar cliente';
         }
     },
@@ -58,7 +57,6 @@ const actions = {
             commit('removeCliente', id)
             return response.data
         } catch (error) {
-            console.error('Error deleting cliente:', error)
         }
     }
 };

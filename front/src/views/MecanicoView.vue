@@ -1,20 +1,21 @@
 <script setup>
 import {ref, computed, onMounted} from 'vue';
 import {useStore} from 'vuex';
-import ClienteForm from '../components/clientes/ClienteForm.vue';
 import AlertComponent from '../components/navbar/AlertComponent.vue';
-import GenericTable from '../components/navbar/GenericTable.vue';
-import {useAlerts} from '../composables/useAlert.js';
+import MecanicoForm from "@/components/clientes/MecanicoForm.vue";
+import {useAlerts} from "@/composables/useAlert.js";
+import GenericTable from "@/components/navbar/GenericTable.vue";
+
 
 const store = useStore();
-const clientes = computed(() => store.getters.allClientes);
+const mecanicos = computed(() => store.getters.allMecanicos);
 const {alertMessage, alertType, showAlert} = useAlerts();
 
-const selectedCliente = ref(null);
+const selectedMecanico = ref(null);
 const isEditing = ref(false);
 
-const fetchClientes = () => {
-  store.dispatch('fetchClientes');
+const fetchMecanicos = () => {
+  store.dispatch('fetchMecanicos');
 };
 
 const headers = [
@@ -23,6 +24,7 @@ const headers = [
   {key: 'nombre_completo', label: 'Nombre'},
   {key: 'email', label: 'Email'},
   {key: 'celular', label: 'Teléfono'},
+  {key: 'estado', label: 'Estado'},
   {key: 'direccion', label: 'Dirección'},
 ];
 
@@ -31,82 +33,79 @@ const dropdownOptions = [
   {action: 'delete', label: 'Eliminar', class: 'delete'}
 ];
 
-const handleDropdownAction = (action, cliente) => {
+const handleDropdownAction = (action, mecanico) => {
   switch (action) {
     case 'edit':
-      editCliente(cliente);
+      editCliente(mecanico);
       break;
     case 'delete':
-      confirmDeleteCliente(cliente);
+      confirmDeleteCliente(mecanico);
       break;
   }
 };
 
-const editCliente = (cliente) => {
-  selectedCliente.value = {...cliente};
+const editCliente = (mecanico) => {
+  selectedMecanico.value = {...mecanico};
   isEditing.value = true;
 };
 
 const handleSave = (message) => {
-  if (message.includes('exitosamente')) {
+  if (!message.includes('Error')) {
     showAlert(message, 'exito');
   } else {
     showAlert(message, 'error');
   }
-  fetchClientes();
+  fetchMecanicos();
   cancelEdit();
 };
 
-const confirmDeleteCliente = (cliente) => {
-  if (confirm(`¿Estás seguro de que deseas eliminar al cliente con documento: ${cliente.documento}?`)) {
-    deleteCliente(cliente.codigo);
+const confirmDeleteCliente = (mecanico) => {
+  if (confirm(`¿Estás seguro de que deseas eliminar al cliente con documento: ${mecanico.documento}?`)) {
+    deleteMecanico(mecanico.codigo);
   }
 };
 
-const deleteCliente = async (id) => {
+const deleteMecanico = async (id) => {
   try {
-    const message = await store.dispatch('deleteCliente', id);
+    const message = await store.dispatch('deleteMecanico', id);
     showAlert(message, 'exito');
-    fetchClientes();
+    fetchMecanicos();
   } catch (error) {
-
     showAlert('Ocurrió un error al intentar eliminar el cliente.', 'error');
   }
 };
 
 const cancelEdit = () => {
-  selectedCliente.value = null;
+  selectedMecanico.value = null;
   isEditing.value = false;
 };
 
-onMounted(fetchClientes);
+onMounted(fetchMecanicos);
 </script>
 
 <template>
   <div class="container">
     <AlertComponent :message="alertMessage" :type="alertType"/>
-    <h2>Clientes</h2>
-    <div class="clientes">
-      <ClienteForm
-          :cliente="selectedCliente"
+    <h2>Mecánicos</h2>
+    <div class="sub-container">
+      <MecanicoForm
+          :mecanico="selectedMecanico"
           :isEditing="isEditing"
           @save="handleSave"
           @cancel="cancelEdit"
       />
-      <div class="clientes-list">
-        <GenericTable
-            :headers="headers"
-            :data="clientes"
-            :actions="dropdownOptions"
-            @action="handleDropdownAction"
-        />
-      </div>
+      <GenericTable
+          :headers="headers"
+          :data="mecanicos"
+          :actions="dropdownOptions"
+          @action="handleDropdownAction"
+      />
     </div>
   </div>
 </template>
 
 <style scoped>
-.clientes {
+.sub-container {
   display: flex;
   gap: 20px;
 }

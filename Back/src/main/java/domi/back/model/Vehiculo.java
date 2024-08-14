@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,7 +14,9 @@ import lombok.Setter;
 public class Vehiculo {
     private String placa;
     private String color;
-    private String cod_marca;
-    private String cod_cliente;
-    private String codigo;
+    private Marca marca;
+    private Cliente cliente;          // Asociación con la clase Cliente
+    private Mecanico mecanico;        // Asociación con la clase Mecanico (si quieres manejarlo directamente)
+    private List<Foto> fotos;         // Lista de fotos asociadas al vehículo
+    private String codigo;            // Código único del vehículo
 }

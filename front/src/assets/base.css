@@ -10,6 +10,14 @@
 
     --vt-c-indigo: #2c3e50;
 
+    --btn-agregar: #4CAF50;
+    --btn-guardar:  #008CBA;
+    --btn-cancelar: #f44336;
+
+    --btn-hover-agregar: hsl(160, 100%, 37%);
+    --btn-hover-guardar: hsl(120, 100%, 37%);
+    --btn-hover-cancelar: hsl(0, 100%, 34%);
+
     --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
     --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
     --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
@@ -19,7 +27,9 @@
     --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
     --vt-c-text-dark-1: var(--vt-c-white);
     --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-    --color-hover: hsla(160, 100%, 37%, 1);
+    --color-primary: hsla(160, 100%, 37%, 1);
+
+    --color-hover: hsla(160, 100%, 37%, 0.8);
 }
 
 /* semantic color variables for this project */
@@ -85,4 +95,11 @@ body {
 }
 input{
     font-size: 15px;
+
 }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] { -moz-appearance:textfield; }

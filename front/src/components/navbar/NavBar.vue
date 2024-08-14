@@ -19,22 +19,23 @@
         <router-link to="/mecanicos">Mecánicos</router-link>
       </li>
       <li>
-        <router-link to="/mantenimiento">Mantenimiento</router-link>
+        <router-link to="/vehiculos">Vehículos</router-link>
       </li>
       <li>
-        <router-link to="/vehicles">Vehículos</router-link>
+        <router-link to="/">Mantenimiento</router-link>
+      </li>
+
+      <li>
+        <router-link to="/">Marcas</router-link>
       </li>
       <li>
-        <router-link to="/marcas">Marcas</router-link>
+        <router-link to="/">Repuestos</router-link>
       </li>
       <li>
-        <router-link to="/repuestos">Repuestos</router-link>
+        <router-link to="/">Servicios</router-link>
       </li>
       <li>
-        <router-link to="/servicios">Servicios</router-link>
-      </li>
-      <li>
-        <router-link to="/foto">Foto</router-link>
+        <router-link to="/">Foto</router-link>
       </li>
     </ul>
 
@@ -70,12 +71,23 @@ ul.menu {
 }
 
 li {
+  border-radius: 5px;
   padding: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 li:hover {
-  border-radius: 5px;
   cursor: pointer;
+  transform: scale(1.05);
+
+}
+a{
+  color: var(--color-primary);
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+li:hover a {
+  color: var(--vt-c-indigo);
 }
 
 @media (min-width: 1024px) {

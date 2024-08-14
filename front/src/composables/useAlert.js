@@ -1,4 +1,3 @@
-// src/composables/useAlert.js
 import { ref } from 'vue';
 
 export function useAlerts() {
@@ -9,14 +8,19 @@ export function useAlerts() {
         alertMessage.value = message;
         alertType.value = type;
         setTimeout(() => {
-            alertMessage.value = '';
-            alertType.value = '';
-        }, 3000);  // Duración de 3 segundos
+            hideAlert();
+        }, 5000);
+    };
+
+    const hideAlert = () => {
+        alertMessage.value = '';
+        alertType.value = '';
     };
 
     return {
         alertMessage,
         alertType,
-        showAlert
+        showAlert,
+        hideAlert
     };
 }
