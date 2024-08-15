@@ -1,7 +1,6 @@
-import axios from 'axios';
+import axiosInstance from './axiosConfig.js'; // Asegúrate de que el archivo y ruta sean correctos
 
-// Configuración general
-const API_URL = 'http://localhost:8085/mecanicos';
+const API_URL = '/mecanicos';
 const ERROR_MESSAGE = 'Error al procesar la solicitud';
 
 // Estado inicial
@@ -33,20 +32,18 @@ const getters = {
 
 // Acciones
 const actions = {
-    // Obtener todos los mecánicos
     async fetchMecanicos({ commit }) {
         try {
-            const response = await axios.get(API_URL);
+            const response = await axiosInstance.get(API_URL);
             commit('setMecanicos', response.data);
         } catch (error) {
             return handleApiError(error);
         }
     },
 
-    // Crear un nuevo mecánico
     async createMecanico({ commit }, mecanico) {
         try {
-            const response = await axios.post(API_URL, mecanico);
+            const response = await axiosInstance.post(API_URL, mecanico);
             commit('newMecanico', response.data);
             return response.data;
         } catch (error) {
@@ -54,10 +51,9 @@ const actions = {
         }
     },
 
-    // Actualizar un mecánico existente
     async updateMecanico({ commit }, mecanico) {
         try {
-            const response = await axios.put(`${API_URL}/${mecanico.id}`, mecanico);
+            const response = await axiosInstance.put(`${API_URL}/${mecanico.id}`, mecanico);
             commit('updateMecanico', response.data);
             return response.data;
         } catch (error) {
@@ -65,10 +61,9 @@ const actions = {
         }
     },
 
-    // Eliminar un mecánico
     async deleteMecanico({ commit }, id) {
         try {
-            await axios.delete(`${API_URL}/${id}`);
+            await axiosInstance.delete(`${API_URL}/${id}`);
             commit('removeMecanico', id);
         } catch (error) {
             return handleApiError(error);
@@ -78,24 +73,15 @@ const actions = {
 
 // Mutaciones
 const mutations = {
-    // Establecer todos los mecánicos
     setMecanicos: (state, mecanicos) => (state.mecanicos = mecanicos),
-
-    // Establecer un mecánico individual
     setMecanico: (state, mecanico) => (state.mecanico = mecanico),
-
-    // Añadir un nuevo mecánico
     newMecanico: (state, mecanico) => state.mecanicos.push(mecanico),
-
-    // Actualizar un mecánico existente
     updateMecanico: (state, updatedMecanico) => {
         const index = state.mecanicos.findIndex(mecanico => mecanico.id === updatedMecanico.id);
         if (index !== -1) {
             state.mecanicos.splice(index, 1, updatedMecanico);
         }
     },
-
-    // Eliminar un mecánico
     removeMecanico: (state, id) => {
         state.mecanicos = state.mecanicos.filter(mecanico => mecanico.id !== id);
     }

@@ -1,10 +1,9 @@
-import axios from 'axios';
+// vehiculos.js
+import axiosInstance from './axiosConfig.js';
+import { handleApiError } from './errorHandler.js';
 
-// Configuración general
-const API_URL = 'http://localhost:8085/vehiculos';
-const ERROR_MESSAGE = 'Error al procesar la solicitud';
+const API_URL = '/vehiculos';
 
-// Estado inicial
 const state = {
     vehiculos: [],
     vehiculo: {
@@ -35,7 +34,6 @@ const state = {
     }
 };
 
-// Getters
 const getters = {
     allVehiculos: state => {
         return state.vehiculos.map(vehiculo => ({
@@ -46,53 +44,51 @@ const getters = {
     vehiculo: state => state.vehiculo
 };
 
-// Acciones
 const actions = {
     async fetchVehiculos({ commit }) {
         try {
-            const response = await axios.get(API_URL);
+            const response = await axiosInstance.get(API_URL);
             commit('setVehiculos', Array.isArray(response.data) ? response.data : []);
         } catch (error) {
-            console.error('Error fetching vehiculos:', error);
+            handleApiError(error);
             commit('setVehiculos', []);
         }
     },
 
     async createVehiculo({ commit }, vehiculo) {
         try {
-            const response = await axios.post(API_URL, vehiculo);
+            const response = await axiosInstance.post(API_URL, vehiculo);
             commit('newVehiculo', response.data);
             return response.data;
         } catch (error) {
-            console.error('Error creating vehiculo:', error);
+            handleApiError(error);
             throw error.response ? error.response.data : error.message;
         }
     },
 
     async updateVehiculo({ commit }, vehiculo) {
         try {
-            const response = await axios.put(`${API_URL}/${vehiculo.codigo}`, vehiculo);
+            const response = await axiosInstance.put(`${API_URL}/${vehiculo.codigo}`, vehiculo);
             commit('updateVehiculo', response.data);
             return response.data;
         } catch (error) {
-            console.error('Error updating vehiculo:', error);
+            handleApiError(error);
             throw error.response ? error.response.data : error.message;
         }
     },
 
     async deleteVehiculo({ commit }, id) {
         try {
-            const response = await axios.delete(`${API_URL}/${id}`);
+            const response = await axiosInstance.delete(`${API_URL}/${id}`);
             commit('removeVehiculo', id);
             return response.data;
         } catch (error) {
-            console.error('Error deleting vehiculo:', error);
+            handleApiError(error);
             throw error.response ? error.response.data : error.message;
         }
     }
 };
 
-// Mutaciones
 const mutations = {
     setVehiculos: (state, vehiculos) => {
         state.vehiculos = vehiculos;

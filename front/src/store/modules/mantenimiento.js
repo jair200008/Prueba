@@ -1,10 +1,7 @@
-import axios from 'axios';
+// Ejemplo de uso en un módulo Vuex (como el módulo de mantenimientos)
+import axiosInstance from './axiosConfig';
+import { handleApiError } from './errorHandler';
 
-// Configuración general
-const API_URL = 'http://localhost:8085/mantenimientos';
-const ERROR_MESSAGE = 'Error al procesar la solicitud';
-
-// Estado inicial
 const state = {
     mantenimientos: [],
     mantenimiento: {
@@ -18,55 +15,50 @@ const state = {
     mantenimientoPorMecanico: null,
 };
 
-// Getters
 const getters = {
-    allMantenimientos: state => state.mantenimientos,
-    mantenimiento: state => state.mantenimiento,
-    mantenimientoPorMecanico: state => state.mantenimientoPorMecanico,
+    allMantenimientos: (state) => state.mantenimientos,
+    mantenimiento: (state) => state.mantenimiento,
+    mantenimientoPorMecanico: (state) => state.mantenimientoPorMecanico,
 };
 
-// Acciones
 const actions = {
     async fetchMaintenancesByMecanico({ commit }, codigoMecanico) {
         try {
-            const response = await axios.get(`${API_URL}/${codigoMecanico}`);
+            const response = await axiosInstance.get(`/mantenimientos/${codigoMecanico}`);
             commit('setMantenimientoPorMecanico', response.data);
         } catch (error) {
-            console.error('Error fetching mantenimientos by mecanico:', error);
+            console.error('Error al obtener mantenimientos por mecánico:', handleApiError(error));
         }
     },
-
     async createMantenimiento({ commit }, mantenimiento) {
         try {
-            const response = await axios.post(API_URL, mantenimiento);
+            const response = await axiosInstance.post('/mantenimientos', mantenimiento);
             commit('newMantenimiento', response.data);
             return response.data;
         } catch (error) {
-            return error.response?.data || ERROR_MESSAGE;
+            throw handleApiError(error);
         }
     },
-
     async updateMantenimiento({ commit }, mantenimiento) {
         try {
-            const response = await axios.put(`${API_URL}/${mantenimiento.codigo}`, mantenimiento);
+            const response = await axiosInstance.put(`/mantenimientos/${mantenimiento.codigo}`, mantenimiento);
             commit('updateMantenimiento', response.data);
             return response.data;
         } catch (error) {
-            return error.response?.data || ERROR_MESSAGE;
+            throw handleApiError(error);
         }
     },
-
     async deleteMantenimiento({ commit }, codigo) {
         try {
-            await axios.delete(`${API_URL}/${codigo}`);
+            const response = await axiosInstance.delete(`/mantenimientos/${codigo}`);
             commit('removeMantenimiento', codigo);
+            return response.data;
         } catch (error) {
-            console.error('Error deleting mantenimiento:', error);
+            console.error('Error al eliminar mantenimiento:', handleApiError(error));
         }
     },
 };
 
-// Mutaciones
 const mutations = {
     setMantenimientos: (state, mantenimientos) => (state.mantenimientos = mantenimientos),
     setMantenimiento: (state, mantenimiento) => (state.mantenimiento = mantenimiento),
@@ -75,13 +67,13 @@ const mutations = {
     },
     newMantenimiento: (state, mantenimiento) => state.mantenimientos.push(mantenimiento),
     updateMantenimiento: (state, updatedMantenimiento) => {
-        const index = state.mantenimientos.findIndex(m => m.codigo === updatedMantenimiento.codigo);
+        const index = state.mantenimientos.findIndex((m) => m.codigo === updatedMantenimiento.codigo);
         if (index !== -1) {
             state.mantenimientos.splice(index, 1, updatedMantenimiento);
         }
     },
     removeMantenimiento: (state, codigo) => {
-        state.mantenimientos = state.mantenimientos.filter(m => m.codigo !== codigo);
+        state.mantenimientos = state.mantenimientos.filter((m) => m.codigo !== codigo);
     },
 };
 
