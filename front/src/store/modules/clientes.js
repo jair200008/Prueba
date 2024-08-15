@@ -1,5 +1,10 @@
-import axios from 'axios'
+import axios from 'axios';
 
+// Configuración general
+const API_URL = 'http://localhost:8085/clientes';
+const ERROR_MESSAGE = 'Error al procesar la solicitud';
+
+// Estado inicial
 const state = {
     clientes: [],
     cliente: {
@@ -15,52 +20,55 @@ const state = {
     }
 };
 
+// Getters
 const getters = {
-    allClientes: state => state.clientes.map(cliente => ({
-        ...cliente,
-        nombre_completo: `${cliente.primer_nombre || ''} ${cliente.segundo_nombre || ''} ${cliente.primer_apellido || ''} ${cliente.segundo_apellido || ''}`.trim()
-    })),
+    allClientes: state =>
+        state.clientes.map(cliente => ({
+            ...cliente,
+            nombre_completo: `${cliente.primer_nombre || ''} ${cliente.segundo_nombre || ''} ${cliente.primer_apellido || ''} ${cliente.segundo_apellido || ''}`.trim()
+        })),
     cliente: state => state.cliente
 };
 
+// Acciones
 const actions = {
     async fetchClientes({ commit }) {
         try {
-            const response = await axios.get('http://localhost:8085/clientes')
-
-            commit('setClientes', response.data)
+            const response = await axios.get(API_URL);
+            commit('setClientes', response.data);
         } catch (error) {
+            return handleApiError(error);
         }
     },
     async createCliente({ commit }, cliente) {
         try {
-            const response = await axios.post('http://localhost:8085/clientes', cliente);
+            const response = await axios.post(API_URL, cliente);
             commit('newCliente', response.data);
-            return response.data; // Asumiendo que el mensaje viene en el campo 'message'
+            return response.data;
         } catch (error) {
-            return error.response.data || 'Error al agregar cliente';
+            return handleApiError(error);
         }
     },
-
     async updateCliente({ commit }, cliente) {
         try {
-            const response = await axios.put(`http://localhost:8085/clientes/${cliente.id}`, cliente)
-            commit('updateCliente', response.data)
-            return response.data
+            const response = await axios.put(`${API_URL}/${cliente.id}`, cliente);
+            commit('updateCliente', response.data);
+            return response.data;
         } catch (error) {
-            return error.response.data || 'Error al actualizar cliente';
+            return handleApiError(error);
         }
     },
     async deleteCliente({ commit }, id) {
         try {
-            const response = await axios.delete(`http://localhost:8085/clientes/${id}`)
-            commit('removeCliente', id)
-            return response.data
+            await axios.delete(`${API_URL}/${id}`);
+            commit('removeCliente', id);
         } catch (error) {
+            return handleApiError(error);
         }
     }
 };
 
+// Mutaciones
 const mutations = {
     setClientes: (state, clientes) => (state.clientes = clientes),
     setCliente: (state, cliente) => (state.cliente = cliente),
@@ -74,6 +82,12 @@ const mutations = {
     removeCliente: (state, id) => {
         state.clientes = state.clientes.filter(cliente => cliente.id !== id);
     }
+};
+
+// Función para manejo de errores
+const handleApiError = (error) => {
+    console.error(error);
+    return error.response?.data || ERROR_MESSAGE;
 };
 
 export default {

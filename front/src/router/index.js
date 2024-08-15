@@ -7,12 +7,7 @@ const routes = createRouter({
         {
             path: '/',
             name: 'home',
-            component: Inicio
-        },
-        {
-            path: '/inicio',
-            name: 'inicio',
-            component: () => import('../views/Inicio.vue')
+            component: () => import('../views/Mantenimiento.vue')
         },
         {
             path: '/clientes',
@@ -28,6 +23,11 @@ const routes = createRouter({
             path: '/vehiculos',
             name: 'vehiculos',
             component: () => import('../views/VehiculosView.vue')
+        },
+        {
+            path: '/mantenimiento',
+            name: 'mantenimiento',
+            component: () => import('../views/Mantenimiento.vue')
         }
     ]
 })

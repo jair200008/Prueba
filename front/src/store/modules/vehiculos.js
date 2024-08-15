@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+// Configuración general
+const API_URL = 'http://localhost:8085/vehiculos';
+const ERROR_MESSAGE = 'Error al procesar la solicitud';
+
+// Estado inicial
 const state = {
     vehiculos: [],
     vehiculo: {
@@ -30,6 +35,7 @@ const state = {
     }
 };
 
+// Getters
 const getters = {
     allVehiculos: state => {
         return state.vehiculos.map(vehiculo => ({
@@ -40,47 +46,44 @@ const getters = {
     vehiculo: state => state.vehiculo
 };
 
+// Acciones
 const actions = {
     async fetchVehiculos({ commit }) {
         try {
-            const response = await axios.get('http://localhost:8085/vehiculos');
-            if (Array.isArray(response.data)) {
-                commit('setVehiculos', response.data);
-            } else {
-                commit('setVehiculos', []);
-            }
+            const response = await axios.get(API_URL);
+            commit('setVehiculos', Array.isArray(response.data) ? response.data : []);
         } catch (error) {
+            console.error('Error fetching vehiculos:', error);
             commit('setVehiculos', []);
         }
     },
+
     async createVehiculo({ commit }, vehiculo) {
-
         try {
-            const response = await axios.post('http://localhost:8085/vehiculos', vehiculo);
+            const response = await axios.post(API_URL, vehiculo);
             commit('newVehiculo', response.data);
-
             return response.data;
         } catch (error) {
+            console.error('Error creating vehiculo:', error);
             throw error.response ? error.response.data : error.message;
         }
-        fetchVehiculos();
     },
+
     async updateVehiculo({ commit }, vehiculo) {
-
         try {
-            const response = await axios.put(`http://localhost:8085/vehiculos/${vehiculo.codigo}`, vehiculo);
-
+            const response = await axios.put(`${API_URL}/${vehiculo.codigo}`, vehiculo);
             commit('updateVehiculo', response.data);
             return response.data;
         } catch (error) {
+            console.error('Error updating vehiculo:', error);
             throw error.response ? error.response.data : error.message;
         }
     },
+
     async deleteVehiculo({ commit }, id) {
         try {
-            const response = await axios.delete(`http://localhost:8085/vehiculos/${id}`);
+            const response = await axios.delete(`${API_URL}/${id}`);
             commit('removeVehiculo', id);
-            console.log(response.data);
             return response.data;
         } catch (error) {
             console.error('Error deleting vehiculo:', error);
@@ -89,22 +92,25 @@ const actions = {
     }
 };
 
+// Mutaciones
 const mutations = {
     setVehiculos: (state, vehiculos) => {
-        state.vehiculos = [];
         state.vehiculos = vehiculos;
     },
+
     newVehiculo: (state, vehiculo) => {
         state.vehiculos.push(vehiculo);
     },
+
     updateVehiculo: (state, updatedVehiculo) => {
         const index = state.vehiculos.findIndex(vehiculo => vehiculo.codigo === updatedVehiculo.codigo);
         if (index !== -1) {
             state.vehiculos.splice(index, 1, updatedVehiculo);
         }
     },
+
     removeVehiculo: (state, id) => {
-        state.vehiculos = state.vehiculos.filter(vehiculo => vehiculo !== id);
+        state.vehiculos = state.vehiculos.filter(vehiculo => vehiculo.codigo !== id);
     }
 };
 

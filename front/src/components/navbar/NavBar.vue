@@ -10,9 +10,6 @@
     </div>
     <ul class="menu">
       <li>
-        <router-link to="/inicio">Inicio</router-link>
-      </li>
-      <li>
         <router-link to="/clientes">Clientes</router-link>
       </li>
       <li>
@@ -22,21 +19,9 @@
         <router-link to="/vehiculos">Vehículos</router-link>
       </li>
       <li>
-        <router-link to="/">Mantenimiento</router-link>
+        <router-link to="/mantenimiento">Mantenimiento</router-link>
       </li>
 
-      <li>
-        <router-link to="/">Marcas</router-link>
-      </li>
-      <li>
-        <router-link to="/">Repuestos</router-link>
-      </li>
-      <li>
-        <router-link to="/">Servicios</router-link>
-      </li>
-      <li>
-        <router-link to="/">Foto</router-link>
-      </li>
     </ul>
 
   </nav>

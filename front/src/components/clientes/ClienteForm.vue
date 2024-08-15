@@ -68,34 +68,31 @@ const handleCancel = () => {
 
 
 <template>
-  <div class="cliente-form">
-    <form @submit.prevent="handleSave">
-      <input v-model="cliente.tipo_documento" type="text" placeholder="Tipo de Documento" required>
-      <input
-          v-model="cliente.documento"
-          type="text"
-          placeholder="Número de Documento"
-          id="documento"
-          required
-          :readonly="isEditing"
-      >
-      <input v-model="cliente.primer_nombre" type="text" placeholder="Primer Nombre" required>
-      <input v-model="cliente.segundo_nombre" type="text" placeholder="Segundo Nombre">
-      <input v-model="cliente.primer_apellido" type="text" placeholder="Primer Apellido" required>
-      <input v-model="cliente.segundo_apellido" type="text" placeholder="Segundo Apellido">
-      <input v-model="cliente.celular" type="text" placeholder="Celular">
-      <input v-model="cliente.direccion" type="text" placeholder="Dirección">
-      <input v-model="cliente.email" type="email" placeholder="Email">
-
-      <div class="form-actions">
-        <button type="submit" :class="['btn', isEditing ? 'guardar' : 'agregar']">
-          {{ isEditing ? 'Guardar' : 'Agregar' }}
-        </button>
-        <button v-if="isEditing" @click="handleCancel" type="button" class="btn cancelar">Cancelar</button>
-      </div>
-    </form>
-  </div>
+  <form @submit.prevent="handleSave">
+    <select v-model="cliente.tipo_documento" required>
+      <option value="" disabled>Seleccione Tipo de Documento</option>
+      <option value="CC">Cédula de Ciudadanía</option>
+      <option value="TI">Tarjeta de Identidad</option>
+      <option value="EX">Extranjero</option>
+      <option value="PA">Pasaporte</option>
+    </select>
+    <input v-model="cliente.documento" type="number" placeholder="Número de Documento" required :readonly="isEditing" maxlength="20" />
+    <input v-model="cliente.primer_nombre" type="text" placeholder="Primer Nombre" required maxlength="30" />
+    <input v-model="cliente.segundo_nombre" type="text" placeholder="Segundo Nombre" maxlength="30" />
+    <input v-model="cliente.primer_apellido" type="text" placeholder="Primer Apellido" required maxlength="30" />
+    <input v-model="cliente.segundo_apellido" type="text" placeholder="Segundo Apellido" maxlength="30" />
+    <input v-model="cliente.celular" type="number" placeholder="Celular" required maxlength="10" />
+    <input v-model="cliente.direccion" type="text" placeholder="Dirección" maxlength="100" />
+    <input v-model="cliente.email" type="email" placeholder="Email" required maxlength="50" />
+    <div class="form-actions">
+      <button type="submit" :class="['btn', isEditing ? 'guardar' : 'agregar']">
+        {{ isEditing ? 'Guardar' : 'Agregar' }}
+      </button>
+      <button v-if="isEditing" @click="handleCancel" type="button" class="btn cancelar">Cancelar</button>
+    </div>
+  </form>
 </template>
+
 
 <style scoped>
 

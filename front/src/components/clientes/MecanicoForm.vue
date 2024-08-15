@@ -65,82 +65,31 @@ const handleCancel = () => {
 </script>
 
 <template>
-  <div class="mecanico-form">
-    <form @submit.prevent="handleSave">
-      <select v-model="mecanico.tipo_documento" required>
-        <option value="" disabled>Seleccione Tipo de Documento </option>
-        <option value="CC">Cédula de Ciudadanía</option>
-        <option value="TI">Tarjeta de Identidad</option>
-        <option value="EX">Extranjero</option>
-        <option value="PA">Pasaporte</option>
-      </select>
-
-      <input
-          v-model="mecanico.documento"
-          type="number"
-          placeholder="Número de Documento"
-
-          maxlength="32"
-          required
-          :readonly="isEditing"
-      >
-      <input
-          v-model="mecanico.primer_nombre"
-          type="text"
-          placeholder="Primer Nombre"
-          maxlength="30"
-          required
-      >
-      <input
-          v-model="mecanico.segundo_nombre"
-          type="text"
-          placeholder="Segundo Nombre"
-          maxlength="30"
-      >
-      <input
-          v-model="mecanico.primer_apellido"
-          type="text"
-          placeholder="Primer Apellido"
-          maxlength="30"
-          required
-      >
-      <input
-          v-model="mecanico.segundo_apellido"
-          type="text"
-          placeholder="Segundo Apellido"
-          maxlength="30"
-      >
-      <input
-          v-model="mecanico.celular"
-          type="number"
-          placeholder="Celular"
-          maxlength="10"
-          minlength="10"
-          required
-      >
-      <input
-          v-model="mecanico.direccion"
-          type="text"
-          placeholder="Dirección"
-          maxlength="200"
-      >
-      <input
-          v-model="mecanico.email"
-          type="email"
-          placeholder="Email"
-          maxlength="100"
-          required
-      >
-
-      <div class="form-actions">
-        <button type="submit" :class="['btn', isEditing ? 'guardar' : 'agregar']">
-          {{ isEditing ? 'Guardar' : 'Agregar' }}
-        </button>
-        <button v-if="isEditing" @click="handleCancel" type="button" class="btn cancelar">Cancelar</button>
-      </div>
-    </form>
-  </div>
+  <form @submit.prevent="handleSave">
+    <select v-model="mecanico.tipo_documento" required>
+      <option value="" disabled>Seleccione Tipo de Documento</option>
+      <option value="CC">Cédula de Ciudadanía</option>
+      <option value="TI">Tarjeta de Identidad</option>
+      <option value="EX">Extranjero</option>
+      <option value="PA">Pasaporte</option>
+    </select>
+    <input v-model="mecanico.documento" type="number" placeholder="Número de Documento" required :readonly="isEditing" maxlength="20" />
+    <input v-model="mecanico.primer_nombre" type="text" placeholder="Primer Nombre" required maxlength="30" />
+    <input v-model="mecanico.segundo_nombre" type="text" placeholder="Segundo Nombre" maxlength="30" />
+    <input v-model="mecanico.primer_apellido" type="text" placeholder="Primer Apellido" required maxlength="30" />
+    <input v-model="mecanico.segundo_apellido" type="text" placeholder="Segundo Apellido" maxlength="30" />
+    <input v-model="mecanico.celular" type="number" placeholder="Celular" required maxlength="10" />
+    <input v-model="mecanico.direccion" type="text" placeholder="Dirección" maxlength="100" />
+    <input v-model="mecanico.email" type="email" placeholder="Email" required maxlength="50" />
+    <div class="form-actions">
+      <button type="submit" :class="['btn', isEditing ? 'guardar' : 'agregar']">
+        {{ isEditing ? 'Guardar' : 'Agregar' }}
+      </button>
+      <button v-if="isEditing" @click="handleCancel" type="button" class="btn cancelar">Cancelar</button>
+    </div>
+  </form>
 </template>
+
 
 <style scoped>
 /* The same styles as before */

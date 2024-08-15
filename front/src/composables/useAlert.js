@@ -4,14 +4,21 @@ export function useAlerts() {
     const alertMessage = ref('');
     const alertType = ref('');
 
-    const showAlert = (message, type) => {
+    // Configuración por defecto para la duración de la alerta
+    const DEFAULT_DURATION = 5000;
+
+    // Función para mostrar alerta
+    const showAlert = (message = '', type = 'info', duration = DEFAULT_DURATION) => {
         alertMessage.value = message;
         alertType.value = type;
+
+        // Oculta la alerta después del tiempo especificado
         setTimeout(() => {
             hideAlert();
-        }, 5000);
+        }, duration);
     };
 
+    // Función para ocultar alerta
     const hideAlert = () => {
         alertMessage.value = '';
         alertType.value = '';

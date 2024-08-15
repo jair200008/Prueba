@@ -30,7 +30,8 @@ const props = defineProps({
           cod_mantenimiento: '',
           codigo: ''
         }
-      ]
+      ],
+      presupuesto: '' // Añadir presupuesto
     })
   },
   isEditing: Boolean
@@ -38,17 +39,16 @@ const props = defineProps({
 
 const emit = defineEmits(['save', 'cancel']);
 const store = useStore();
-const { showAlert } = useAlerts();
+const {showAlert} = useAlerts();
 
-const vehiculo = ref({ ...props.vehiculo });
+// Usa reactive en lugar de ref para objetos complejos
+const vehiculo = ref({...props.vehiculo});
 
 watch(
     () => props.vehiculo,
     (newVehiculo) => {
       vehiculo.value = {
-        codigo: newVehiculo?.codigo || '',
-        placa: newVehiculo?.placa || '',
-        color: newVehiculo?.color || '',
+        ...newVehiculo,
         marca: {
           nombre_marca: newVehiculo?.marca?.nombre_marca || '',
         },
@@ -57,99 +57,107 @@ watch(
         },
         fotos: [
           {
-            ruta: newVehiculo?.fotos?.[0]?.ruta || '',
-            cod_mantenimiento: newVehiculo?.fotos?.[0]?.cod_mantenimiento || '',
-            codigo: newVehiculo?.fotos?.[0]?.codigo || ''
-          }
+            ...newVehiculo?.fotos?.[0] || {
+              ruta: '',
+              cod_mantenimiento: '',
+              codigo: ''
+            }
         ]
-      };
-    },
-    { immediate: true, deep: true }
-);
-
-const handleSave = async () => {
-  try {
-    const action = props.isEditing ? 'updateVehiculo' : 'createVehiculo';
-    const message = await store.dispatch(action, vehiculo.value);
-
-    emit('save', message);
-    if (!message.includes('Error')) {
-
-      resetForm();
+    ],
+      presupuesto: newVehiculo?.presupuesto || '' // Asignar presupuesto
     }
-  } catch (error) {
-    showAlert('Ocurrió un error al procesar el vehículo.', 'error');
-  }
-};
-
-const resetForm = () => {
-  vehiculo.value = {
-    placa: '',
-    color: '',
-    marca: {
-      codigo: '',
-      nombre_marca: '',
+      ;
     },
-    cliente: {
-      tipo_documentos: '',
-      documento: '',
-      primer_nombre: '',
-      segundo_nombre: '',
-      primer_apellido: '',
-      segundo_apellido: '',
-      celular: '',
-      direccion: '',
-      email: ''
-    },
-    fotos: [
       {
-        ruta: '',
-        cod_mantenimiento: '',
-        codigo: ''
+        immediate: true, deep
+      :
+        true
       }
-    ]
+    )
+      ;
 
-  };
-};
+      const handleSave = async () => {
+        try {
+          const action = props.isEditing ? 'updateVehiculo' : 'createVehiculo';
+          const message = await store.dispatch(action, vehiculo.value);
 
-const handleCancel = () => {
-  resetForm();
-  emit('cancel');
-};
+          emit('save', message);
+          if (!message.includes('Error')) {
+            resetForm();
+          }
+        } catch (error) {
+          showAlert('Ocurrió un error al procesar el vehículo.', 'error');
+        }
+      };
+
+      const resetForm = () => {
+        vehiculo.value = {
+          placa: '',
+          color: '',
+          marca: {
+            codigo: '',
+            nombre_marca: '',
+          },
+          cliente: {
+            tipo_documentos: '',
+            documento: '',
+            primer_nombre: '',
+            segundo_nombre: '',
+            primer_apellido: '',
+            segundo_apellido: '',
+            celular: '',
+            direccion: '',
+            email: ''
+          },
+          fotos: [
+            {
+              ruta: '',
+              cod_mantenimiento: '',
+              codigo: ''
+            }
+          ],
+          presupuesto: '' // Resetear presupuesto
+        };
+      };
+
+      const handleCancel = () => {
+        resetForm();
+        emit('cancel');
+      };
 </script>
 
 <template>
-  <div class="form-container">
-    <form @submit.prevent="handleSave">
-      <input v-model="vehiculo.placa" type="text" placeholder="Placa" required>
-      <input v-model="vehiculo.color" type="text" placeholder="Color" required>
-      <input v-model="vehiculo.marca.nombre_marca" type="text" placeholder="Nombre de la Marca" required maxlength="50">
-      <input v-model="vehiculo.cliente.documento" type="text" placeholder="Documento del Cliente" required
-             :readonly="isEditing">
-      <input v-model="vehiculo.fotos[0].ruta" type="text" placeholder="Rutas de Fotos (separadas por comas)" required>
-
-      <div class="form-actions">
-        <button type="submit" :class="['btn', isEditing ? 'guardar' : 'agregar']">
-          {{ isEditing ? 'Guardar' : 'Agregar' }}
-        </button>
-        <button v-if="isEditing" @click="handleCancel" type="button" class="btn cancelar">Cancelar</button>
-      </div>
-    </form>
-  </div>
+  <form @submit.prevent="handleSave">
+    <input v-model="vehiculo.placa" type="text" placeholder="Placa" required maxlength="10"/>
+    <input v-model="vehiculo.color" type="text" placeholder="Color" required maxlength="20"/>
+    <input v-model="vehiculo.marca.nombre_marca" type="text" placeholder="Nombre de la Marca" required maxlength="50"/>
+    <input v-model="vehiculo.cliente.documento" type="number" placeholder="Documento del Cliente" required
+           :readonly="isEditing"/>
+    <input v-model="vehiculo.fotos[0].ruta" type="text" placeholder="Ruta de Fotos" maxlength="255" required/>
+    <input v-model="vehiculo.presupuesto" type="number" placeholder="Presupuesto" required min="0" step="0.01"/>
+    <div class="form-actions">
+      <button type="submit" :class="['btn', isEditing ? 'guardar' : 'agregar']">
+        {{ isEditing ? 'Guardar' : 'Agregar' }}
+      </button>
+      <button v-if="isEditing" @click="handleCancel" type="button" class="btn cancelar">Cancelar</button>
+    </div>
+  </form>
 </template>
 
 <style scoped>
-
 input {
   border: none;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
+
 input:focus {
   transform: scale(1.05);
 }
+
 input:hover:not(:focus) {
   transform: scale(1.01);
 }
+
 .btn {
   padding: 12px 12px;
   border: none;
@@ -172,7 +180,8 @@ input:hover:not(:focus) {
   width: 100%;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
-.btn:hover{
+
+.btn:hover {
   transform: scale(1.05);
 }
 

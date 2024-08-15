@@ -11,13 +11,11 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Mantenimiento {
-    private Long Estado;
-    private String cod_vehiculo;
-    private Date fecha;
-    private String cod_mecanico;
-    private Long presupuesto;
     private String codigo;
-
+    private String estado;
+    private Vehiculo vehiculo;
+    private String fecha;
+    private Mecanico mecanico;
+    private Long presupuesto;
 }
